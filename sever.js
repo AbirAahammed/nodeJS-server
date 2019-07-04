@@ -1,8 +1,11 @@
 var http = require('http');
+var os = require('os');
 var fs = require('fs');
 function onRequest( request, response) {
+		var type = request.url.split("?")[0].split("/")[request.url.split("?")[0].split("/").length - 1].split(".")[1]
 		console.log("The url: "+ request.url);
-		response.writeHead(200,{'Content-Type': 'text/html'});
+		console.log("Type: "+ type);
+		response.writeHead(200,{'Content-Type': 'text/'+type});
 		fs.readFile(request.url, null, function(error, data){
 			if (error){
 				response.writeHead(404);
@@ -14,5 +17,5 @@ function onRequest( request, response) {
 		});
 }
 
-http.createServer(onRequest).listen(8080);
-console.log('Server running at http://127.0.0.1:8080/');
+http.createServer(onRequest).listen(os.hostname(),8080);
+console.log('Server running at http://'+os.hostname()+':8080/');
